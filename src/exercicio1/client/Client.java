@@ -1,13 +1,10 @@
 package exercicio1.client;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Random;
 
-import exercicio1.Message;
+import exercicio1.common.Message;
+import exercicio1.common.Serializer;
 
 public abstract class Client implements Runnable{
 	protected final String TheOneRing = 
@@ -27,6 +24,7 @@ public abstract class Client implements Runnable{
 	protected Random rng = new Random();
 	protected int selectedNumber;
 	protected Message receivedMessage;
+	private Serializer serializer = new Serializer();
 	
 	public Client (String host1, int port){
 		this.host = host1;
@@ -34,22 +32,11 @@ public abstract class Client implements Runnable{
 	}
 	
 	public byte[] serialize(Message message) throws IOException{
-		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        ObjectOutputStream outStream = new ObjectOutputStream(byteStream);
-
-        outStream.writeObject(message);
-        byte[] marshalledMessage = byteStream.toByteArray();
-        
-        return marshalledMessage;
+        return serializer.serialize(message);
 	}
 	
     public Message deserialize(byte[] data) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream byteStream = new ByteArrayInputStream(data);
-        ObjectInputStream inputStream = new ObjectInputStream(byteStream);
-
-        Message unmarshalledMessage = (Message) inputStream.readObject();
-
-        return unmarshalledMessage;
+       return serializer.deserialize(data);
     }
     
 	public void run(){
@@ -57,10 +44,10 @@ public abstract class Client implements Runnable{
 			try {
 				selectedNumber = rng.nextInt(8);
 				send(new Message(strings[selectedNumber]));
-				System.out.println("Text Sent to Server: "+ strings[selectedNumber]);
+				System.out.println("Westron Sent to Server: "+ strings[selectedNumber]);
 				receivedMessage = deserialize(receive());
-				System.out.println("Text Received From Server: " + receivedMessage.getMessage());
-				wait(2000);
+				System.out.println("Black Speech Received From Server: " + receivedMessage.getMessage());
+				Thread.sleep(2000);
 			} catch(Exception e){
 				e.printStackTrace();
 			}

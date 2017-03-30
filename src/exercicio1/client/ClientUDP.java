@@ -5,7 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import exercicio1.Message;
+import exercicio1.common.Message;
 
 public class ClientUDP extends Client{
 

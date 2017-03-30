@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import exercicio1.Message;
+import exercicio1.common.Message;
 
 public class ClientTCP extends Client {
 	
